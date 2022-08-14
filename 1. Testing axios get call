@@ -1,0 +1,91 @@
+ToDo.js-
+
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+
+function ToDo() {
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        fetchData();
+    }, [])
+
+    const fetchData = async () => {
+        const url = 'https://jsonplaceholder.typicode.com/todos/';
+        const res = await axios.get(url);
+        setData(res.data);
+    }
+
+    return (
+        <div>
+            <ul style={{ textAlign: 'left' }}>
+                {data.map((item, key) => {
+                    return <li key={key} data-testid="todo">{item.title}</li>;
+                })}
+            </ul>
+        </div>
+    )
+
+}
+
+export default ToDo;
+
+
+______________________
+
+
+ToDo.test.js-
+
+import React from 'react';
+import { render, wait, cleanup, screen, waitFor } from '@testing-library/react';
+import axios from "axios";
+import ToDo from '../Todo';
+
+jest.mock("axios");
+
+const dummyTodos = [
+    {
+        userId: 1,
+        id: 1,
+        title: "todo 1",
+        completed: false,
+    },
+    {
+        userId: 1,
+        id: 2,
+        title: "todo 2",
+        completed: false,
+    },
+    {
+        userId: 1,
+        id: 3,
+        title: "todo 3",
+        completed: false,
+    },
+];
+
+
+function mockCall() {
+    axios.get.mockResolvedValue({ data: dummyTodos });
+}
+
+test('mocking axios request ti check count of values', async () => {
+    mockCall()
+    render(<ToDo />);
+    const todoList = await waitFor(() => screen.findAllByTestId("todo"));
+    expect(todoList).toHaveLength(3);
+});
+
+test('testing fetched value on ui', async () => {
+    mockCall()
+    render(<ToDo />);
+    const todoList = await waitFor(() => screen.getAllByTestId("todo").map(row => row.textContent));
+    expect(todoList).toEqual(["todo 1", "todo 2", "todo 3",])
+});
+
+test('testing axios url', async () => {
+    mockCall()
+    render(<ToDo />);
+    expect(axios.get).toHaveBeenCalledWith("https://jsonplaceholder.typicode.com/todos/");
+    expect(axios.get).toHaveBeenCalledTimes(1);
+});
