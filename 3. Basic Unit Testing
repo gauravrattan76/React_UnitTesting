@@ -1,0 +1,41 @@
+ToDo.js
+
+import React from 'react'
+
+function ToDo() {
+    return (
+        <div data-testid="todo1">Hello World!!</div>
+    )
+}
+
+export default ToDo;
+
+
+
+_____
+
+ToDo.test.js-
+
+import { render, screen } from '@testing-library/react';
+import ToDo from '../Todo';
+
+test('renders learn react link', () => {
+    render(<ToDo />);
+    const linkElement = screen.getByTestId("todo1")
+    expect(linkElement).toBeInTheDocument();
+});
+
+
+
+___
+
+
+import { render, screen } from '@testing-library/react';
+import ToDo from '../Todo';
+
+test('renders learn react link', () => {
+    render(<ToDo />);
+    const linkElement = screen.getByTestId("todo1")
+    expect(linkElement).toBeInTheDocument();
+    expect(linkElement).toHaveTextContent("Hello World!!")
+});
