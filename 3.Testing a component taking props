@@ -1,0 +1,55 @@
+Testing a normal component-
+
+
+App.js-
+
+We have header component in app component taking a prop
+
+
+import React, {useState} from 'react'
+import logo from './logo.svg';
+import './App.css';
+import Header from './components/Header';
+
+function App() {
+const [val, setVal] = useState('gaurav')
+
+  return (
+    <div className="App">
+      <div>Hello Gaurav</div>
+      <Header title="gaurav" />
+     <input type='text' id='id1' value={val}  onChange={(e) => setVal(e.target.value)} />
+    </div>
+  );
+}
+
+export default App;
+
+
+Header.js-
+
+import React from 'react'
+
+export default function Header({title}){
+    return(
+
+        <h1 className='test' data-testid="test12">{title}</h1>
+    )
+}
+
+
+
+Header.test.js
+
+
+import { render, screen } from "@testing-library/react";
+import Header from "../Header";
+
+it('test for header component rendering', () =>{
+    const props = {
+        title: 'Gaurav1'
+    }
+    render(<Header {...props} />)
+   const el = screen.getByTestId('test12')
+    expect(el).toBeInTheDocument();
+})
