@@ -1,0 +1,39 @@
+Different query methods-
+____________________________________-
+
+
+getBy
+
+Error earn no record
+If find return
+Multi error
+Async no
+
+
+
+findBy
+
+Error when no record
+If find return
+Multi error
+Async yes
+
+
+Queryby
+
+Null when no record
+If find return
+Multi error
+Async no
+
+
+Difference in byAll amd  normal  method is
+
+
+If one found return array
+If multi found return array
+
+
+In simple query , if you find multiple, then error
+
+
