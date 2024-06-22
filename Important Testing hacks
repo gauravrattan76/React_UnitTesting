@@ -1,0 +1,60 @@
+Good way to separate elements if we find multiple items
+
+Use nested object to get the value
+   const el = screen.getByRole('heading', {name: 'rattan'})
+
+
+   const el = screen.getAllByTestId('test12')
+    expect(el[0]).toBeInTheDocument();
+
+__________________________________
+
+
+Use async and await with findBy or findAllBy
+If you don’t use async await it will fail
+
+
+it('test for header component rendering', async () =>{
+    const props = {
+        title: 'Gaurav1'
+    }
+    render(<Header {...props} />)
+   const el =await screen.findAllByTestId('test12')
+    expect(el[0]).toBeInTheDocument();
+})
+
+___________________
+
+
+Can do negative testing by queryByAll-
+
+
+it('test for header component rendering1', async () =>{
+    const props = {
+        title: 'Gaurav1'
+    }
+    render(<Header {...props} />)
+   const el = screen.queryByTestId('test123')
+    expect(el).not.toBeInTheDocument();
+})
+
+
+Here the tested id doesn’t exist hence we can test for the negative scenarios here
+
+
+________________
+
+
+With the getAllBy
+
+We can assert for the length as well
+
+it('test for header component rendering', async () =>{
+    const props = {
+        title: 'Gaurav1'
+    }
+    render(<Header {...props} />)
+   const el =await screen.findAllByTestId('test12')
+    expect(el.length).toBe(2);
+})
+
