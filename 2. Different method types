@@ -33,6 +33,8 @@ Difference in byAll amd  normal  method is
 If one found return array
 If multi found return array
 
+Note - Important point to keep in mind is if you are using async await, then always use find by method
+
 
 In simple query , if you find multiple, then error
 
