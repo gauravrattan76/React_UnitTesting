@@ -1,4 +1,55 @@
-ToDo.js-
+Getting started with the React unit testing-
+
+
+1. Getting started with Unit testing
+
+Important steps in unit testing in react are the below ones-
+
+1. We need to render a component to be tested
+2. Find the elements to be tested
+3. Then write the assertion to start testing
+
+
+Ex.
+
+App.js
+
+
+import React, {useState} from 'react'
+import logo from './logo.svg';
+import './App.css';
+
+function App() {
+const [val, setVal] = useState('gaurav')
+
+  return (
+    <div className="App">
+      <div>Hello Gaurav</div>
+     <input type='text' id='id1' value={val}  onChange={(e) => setVal(e.target.value)} />
+    </div>
+  );
+}
+
+export default App;
+
+
+
+App.test.js
+
+
+import { render, screen } from '@testing-library/react';
+import App from './App';
+
+test('renders learn react link', () => {
+  render(<App />);
+  const linkElement = screen.getByText('Hello Gaurav');
+  expect(linkElement).toBeInTheDocument();
+});
+
+
+_______________________________
+
+axios testing
 
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
