@@ -53,3 +53,36 @@ it('test for header component rendering', () =>{
    const el = screen.getByTestId('test12')
     expect(el).toBeInTheDocument();
 })
+
+
+______________________________________
+
+Good way to separate elements if we find multiple items
+
+Use nested object to get the value
+   const el = screen.getByRole('heading', {name: 'rattan'})
+
+
+   const el = screen.getAllByTestId('test12')
+    expect(el[0]).toBeInTheDocument();
+
+__________________________________
+
+
+Use async and await with findBy or findAllBy
+If you don’t use async await it will fail
+
+
+it('test for header component rendering', async () =>{
+    const props = {
+        title: 'Gaurav1'
+    }
+    render(<Header {...props} />)
+   const el =await screen.findAllByTestId('test12')
+    expect(el[0]).toBeInTheDocument();
+})
+
+
+
+_________________________________
+
