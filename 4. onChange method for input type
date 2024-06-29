@@ -1,0 +1,42 @@
+App.js
+
+import React, {useState} from 'react'
+import logo from './logo.svg';
+import './App.css';
+import Header from './components/Header';
+
+function App() {
+const [val, setVal] = useState('gaurav')
+
+  return (
+    <div className="App">
+      <div>Hello Gaurav</div>
+      <Header title="gaurav" />
+     <input type='text' id='id1' data-testid="id2" value={val}  onChange={(e) => setVal(e.target.value)} />
+    </div>
+  );
+}
+
+export default App;
+
+
+
+__________
+App.test.js
+
+import { render, screen, fireEvent } from '@testing-library/react';
+import App from './App';
+
+test('renders learn react link', () => {
+  render(<App />);
+  const linkElement = screen.getByText('Hello Gaurav');
+  expect(linkElement).toBeInTheDocument();
+});
+
+test('check if change event is called',async () => {
+  render(<App />);
+  // use async operation, use change method to change the val
+  const linkElement1 =await screen.findByTestId('id2')
+  fireEvent.change(linkElement1,{target:{value: 'rattan'}})
+  expect(linkElement1).toHaveValue('rattan')
+});
