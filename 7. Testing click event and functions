@@ -1,0 +1,48 @@
+Comp1-
+
+import {React, useState} from 'react'
+
+export default function Comp1(){
+    const [count, setCount] = useState(0)
+
+const handleClick = () =>{
+setCount(p => p +1)
+}
+
+    return(
+        <div>
+            <div data-testid="countId">{count}</div>
+            <button data-testid='submitBtn' onClick={handleClick}>Submit</button>
+        </div>
+    )
+}
+
+
+_______
+
+
+Comp1.test.js-
+
+import { render, screen, fireEvent } from "@testing-library/react";
+import Comp1 from "../Comp1";
+
+describe('all the test for comp1', () => {
+    it('checks if comp is loaded', () => {
+        render(<Comp1 />)
+
+        const el = screen.getByTestId('countId');
+        expect(el).toBeInTheDocument()
+    }
+    )
+
+    it('checks if comp is loaded', () => {
+        render(<Comp1 />)
+        const el = screen.getByTestId('submitBtn');
+        const el2 = screen.getByTestId('countId');
+        
+        fireEvent.click(el)
+        expect(el2).toHaveTextContent(1)
+
+    }
+    )
+})
