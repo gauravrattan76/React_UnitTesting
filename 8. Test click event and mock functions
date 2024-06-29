@@ -1,0 +1,45 @@
+import {React, useState} from 'react'
+
+export default function Comp1({testFun}){
+  
+
+const handleClick = () =>{
+    testFun()
+}
+
+    return(
+        <div>
+        <div data-testid='helloDiv'>Hello</div>
+            <button data-testid='submitBtn' onClick={handleClick}>Submit</button>
+        </div>
+    )
+}
+
+
+______
+
+
+import { render, screen, fireEvent } from "@testing-library/react";
+import Comp1 from "../Comp1";
+
+describe('all the test for comp1', () => {
+    it('checks if comp is loaded', () => {
+        const testFun = jest.mock();
+        render(<Comp1 testFun={testFun}/>)
+
+        const el = screen.getByTestId('helloDiv');
+        expect(el).toBeInTheDocument()
+
+    }
+    )
+
+    it('checks if comp is loaded', () => {
+        const testFun = jest.mock();
+        render(<Comp1 testFun={testFun}/>)
+        const el = screen.getByTestId('submitBtn');
+        fireEvent.click(el)
+        expect(testFun).toHaveBeenCalledTimes(1)
+
+    }
+    )
+})
