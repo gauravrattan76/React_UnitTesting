@@ -1,0 +1,59 @@
+Header.test.js
+
+
+import { fireEvent, render, screen } from "@testing-library/react";
+import Header from "../Header";
+
+it('test for header component rendering', async () =>{
+    const props = {
+        title: 'Gaurav1'
+    }
+    render(<Header {...props} />)
+   const el =await screen.findAllByTestId('test12')
+    expect(el.length).toBe(2);
+})
+
+it('test for header component rendering1', async () =>{
+    const props = {
+        title: 'Gaurav1'
+    }
+    render(<Header {...props} />)
+   const el = screen.queryByTestId('test123')
+    expect(el).not.toBeInTheDocument();
+})
+
+it('test for handle click', async () =>{
+    const handleClick = jest.fn();
+    
+    const props = {
+        title: 'Gaurav1'
+    }
+    render(<Header {...props} />)
+   const el =await screen.findByRole('button')
+   await fireEvent.click(el)
+   expect(handleClick).toHaveBeenCalledTimes(0)
+
+})
+
+
+_________
+
+Header.js
+
+
+import React from 'react'
+
+export default function Header({ title }) {
+const handleClick = () =>{
+    console.log('handle click is called')
+}
+
+    return (
+        <div>
+            <h1 className='test' data-testid="test12">{title}</h1>
+            <h2 className='test' data-testid="test12">{title}</h2>
+            <button onClick={handleClick}>click me</button>
+        </div>
+
+    )
+}
