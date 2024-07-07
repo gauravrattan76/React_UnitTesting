@@ -1,0 +1,170 @@
+Testing component making api calls
+
+__________________________________________
+
+
+jest.mock("axios");
+
+
+In Jest, jest.mock("axios") is used to mock or stub modules. Specifically, when you call jest.mock("axios"), Jest replaces the axios module with a mock implementation for the purpose of your tests. This allows you to simulate the behavior of axios without actually making HTTP requests during your tests.
+
+When you call jest.mock("axios"), Jest automatically mocks the axios module.
+Any import statement in your code that imports axios will use this mocked version instead of the actual axios module.
+
+
+Mock Implementation:
+* By default, Jest mocks the module with an auto-generated mock that has mock implementations for all functions (get, post, put, delete, etc.) available on axios.
+* These mock functions typically return promises that resolve with mock data, allowing you to simulate various scenarios (success, error, etc.) without actually sending HTTP requests.
+
+
+
+
+
+
+jest.mock("axios") helps create a controlled testing environment where network interactions are isolated and predictable.
+You can specify what data axios should return, simulate errors, or even verify how many times axios functions were called.
+
+
+
+
+
+Code-
+
+// api.js
+import axios from 'axios';
+
+export const fetchData = async () => {
+  try {
+    const response = await axios.get('https://api.example.com/data');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching data: ', error);
+    throw error;
+  }
+};
+
+
+
+______
+
+// __tests__/api.test.js
+import { fetchData } from '../api';
+import axios from 'axios';
+
+jest.mock('axios');
+
+describe('fetchData', () => {
+  it('fetches successfully data from API', async () => {
+    const mockData = { data: 'mocked data' };
+    axios.get.mockResolvedValue(mockData);
+
+    const data = await fetchData();
+    expect(data).toEqual(mockData.data);
+  });
+
+  it('handles API errors', async () => {
+    const errorMessage = 'Network Error';
+    axios.get.mockRejectedValue(new Error(errorMessage));
+
+    await expect(fetchData()).rejects.toThrow(errorMessage);
+  });
+});
+
+
+___________
+
+
+Explanation
+* Mocking axios Module:
+    * jest.mock('axios') replaces the axios module with a mock version.
+    * axios.get.mockResolvedValue(mockData) sets up axios.get to resolve with mockData when called, simulating a successful API call.
+    * axios.get.mockRejectedValue(new Error(errorMessage)) sets up axios.get to reject with an error, simulating an API error.
+
+
+
+working code-
+
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
+
+function Data() {
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        fetchData();
+    }, [])
+
+    const fetchData = async () => {
+        const url = 'https://jsonplaceholder.typicode.com/todos/';
+        const res = await axios.get(url);
+        setData(res.data);
+    }
+
+    return (
+        <div>
+            <ul style={{ textAlign: 'left' }}>
+                {data.map((item, key) => {
+                    return <li key={key} data-testid="todo">{item.title}</li>;
+                })}
+            </ul>
+        </div>
+    )
+
+}
+
+export default Data;
+
+
+import React from 'react';
+import { render, wait, cleanup, screen, waitFor } from '@testing-library/react';
+import axios from "axios";
+import Data from '../Data';
+
+jest.mock("axios");
+
+const dummyTodos = [
+    {
+        userId: 1,
+        id: 1,
+        title: "todo 1",
+        completed: false,
+    },
+    {
+        userId: 1,
+        id: 2,
+        title: "todo 2",
+        completed: false,
+    },
+    {
+        userId: 1,
+        id: 3,
+        title: "todo 3",
+        completed: false,
+    },
+];
+
+
+function mockCall() {
+    axios.get.mockResolvedValue({ data: dummyTodos });
+}
+
+test('mocking axios request ti check count of values', async () => {
+    mockCall()
+    render(<Data />);
+    const todoList = await waitFor(() => screen.findAllByTestId("todo"));
+    expect(todoList).toHaveLength(3);
+});
+
+test('testing fetched value on ui', async () => {
+    mockCall()
+    render(<Data />);
+    const todoList = await waitFor(() => screen.getAllByTestId("todo").map(row => row.textContent));
+    expect(todoList).toEqual(["todo 1", "todo 2", "todo 3",])
+});
+
+test('testing axios url', async () => {
+    mockCall()
+    render(<Data />);
+    expect(axios.get).toHaveBeenCalledWith("https://jsonplaceholder.typicode.com/todos/");
+    expect(axios.get).toHaveBeenCalledTimes(1);
+});
